@@ -27,6 +27,9 @@ function ensureLogin(req, res, next) {
     next();
   }
 }
+app.use(bodyParser.urlencoded({ extended:true }));
+
+app.use(bodyParser.json());
 
 const user = {
   username: ""
@@ -304,6 +307,18 @@ app.post("/login", (req, res) => {
     }).catch((err) => {
         // res.send(22222222222222222);
         res.render("login", {errorMessage: err, user: req.body.user});
+    });
+});
+
+app.post("/api/updatePassword", (req, res) =>{
+    dataServiceAuth.checkUser({ user: req.body.user, password: req.body.currentPassword }).then(() => {
+        dataServiceAuth.updatePassword(req.body).then(() => {
+            res.render("",{successMessage: "Password changed successfully for user: ", user: req.body.user} )
+        }).catch((err) => {
+            res.render("", {errorMessage: err} );
+        });
+    }).catch((err) => {
+        reject({errorMessage: err});
     });
 });
 
