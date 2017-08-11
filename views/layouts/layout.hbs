@@ -18,7 +18,15 @@
                 <div class="col-md-12">
                     <h1>myApp</h1>
                     {{#if user.username}}
-                    <span class="pull-right"><a href="/logout" class="btn btn-primary">&nbsp;&nbsp;&nbsp;Log Out:&nbsp;{{user.username}}&nbsp;&nbsp;&nbsp;</a></span>
+                    <span class="pull-right"><a href="/logout" class="btn btn-primary">{{user.username}}</a></span>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true">Dropdown&nbsp;&nbsp;<span class="caret"></span></button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="#" data-toggle="modal" data-target="#profileModal">Profile</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/logout">Log out</a></li>
+                            </ul>
+                    </div>
                     {{else}}
                     <span class="pull-right"><a class="btn btn-success" href="/login">&nbsp;&nbsp;&nbsp;Login&nbsp;&nbsp;&nbsp;</a>
                     <a class="btn btn-primary" href="/register">&nbsp;&nbsp;&nbsp;Register&nbsp;&nbsp;&nbsp;</a></span>
