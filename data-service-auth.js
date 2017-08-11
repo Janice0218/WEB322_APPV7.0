@@ -28,8 +28,8 @@ module.exports.initialize = () => {
             reject(err); // reject the promise with the provided error
         });
         db.once('open', () => {
+            Comment = db.model("users", userSchema);
             Comment.remove({ }, function (err) { });
-            //Comment = db.model("users", userSchema);
             resolve("Secess initialize MongoDB");
         });
     });
@@ -46,21 +46,23 @@ module.exports.registerUser = (userData) => {
         if (userData.password != userData.password2) {
             reject("Passwords do not match.");
         } else {
-        let newUser = new Comment(userData);
+            let newUser = new Comment(userData);
+             bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
+                if (err) {
+                    reject("There was an error encrypting the password");
+                }
+                bcrypt.hash(userData.password, salt, function(err, hash) { // encrypt the password: "myPassword123"
+                    // TODO: Store the resulting "hash" value in the DB
+                    console.log(chalk.yellow(hash));
+                    newUser.password = hash;
+                });
+             });
         newUser.save((err) => {
             console.log(chalk.blue("===   Object is saving in the database.  ==="));
             console.log(chalk.blue("============================================"));
             console.log(userData);
             console.log(chalk.blue("============================================"));
             console.log(chalk.blue("This is User object id from userSchema: " + newUser._id));
-            bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
-                bcrypt.hash("myPassword123", salt, function(err, hash) { // encrypt the password: "myPassword123"
-                    // TODO: Store the resulting "hash" value in the DB
-                    
-                });
-            }).catch((err) => {
-                reject("There was an error encrypting the password");
-            });
             resolve();
         }).catch((err) => {
             if (err) {
