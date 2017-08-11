@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const chalk = require('chalk');
+const bcrypt = require('bcryptjs');
 let Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
@@ -27,7 +28,8 @@ module.exports.initialize = () => {
             reject(err); // reject the promise with the provided error
         });
         db.once('open', () => {
-            Comment = db.model("users", userSchema);
+            Comment.remove({ }, function (err) { });
+            //Comment = db.model("users", userSchema);
             resolve("Secess initialize MongoDB");
         });
     });
@@ -51,6 +53,14 @@ module.exports.registerUser = (userData) => {
             console.log(userData);
             console.log(chalk.blue("============================================"));
             console.log(chalk.blue("This is User object id from userSchema: " + newUser._id));
+            bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
+                bcrypt.hash("myPassword123", salt, function(err, hash) { // encrypt the password: "myPassword123"
+                    // TODO: Store the resulting "hash" value in the DB
+                    
+                });
+            }).catch((err) => {
+                reject("There was an error encrypting the password");
+            });
             resolve();
         }).catch((err) => {
             if (err) {
@@ -74,6 +84,14 @@ module.exports.checkUser = (userData) =>{
     console.log(">>> userName: " + chalk.green(userData.user) + " <<<");
     return new Promise((resolve, reject) => {
         Comment.find({user: userData.user}).exec().then((user) => {
+            bcrypt.compare("myPassword123", hash).then((res) => {
+            // res === true if it matches and res === false if it does not match
+                res === true;
+                resolve();
+            }).catch((err) => {
+                res === false;
+                reject("Unable to find user: "+ userData.user);
+            });
         console.log(chalk.bgCyan("Sucess!!!!!!" + user));
         if (user == null) {
             reject('Unable to find user: ' + userData.user);
