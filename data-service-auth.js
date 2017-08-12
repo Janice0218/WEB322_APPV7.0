@@ -55,27 +55,29 @@ module.exports.registerUser = (userData) => {
                     // TODO: Store the resulting "hash" value in the DB
                     console.log(chalk.yellow(hash));
                     newUser.password = hash;
+                    console.log(chalk.red(newUser));
+                    newUser.save((err) => {
+                        console.log(chalk.blue("===   Object is saving in the database.  ==="));
+                        console.log(chalk.blue("============================================"));
+                        console.log(userData);
+                        console.log(chalk.blue("============================================"));
+                        console.log(chalk.blue("This is User object id from userSchema: " + newUser._id));
+                        console.log(chalk.green(newUser));
+                        resolve();
+                    }).catch((err) => {
+                        if (err) {
+                            if (err.code == 11000) {
+                                reject("User Name already taken");
+                            } else {
+                                reject("There was an error creating the user: ${user}");
+                            }
+                        }
+            // reject("There was an error creating the user222222");
+                    });
                 });
              });
-        newUser.save((err) => {
-            console.log(chalk.blue("===   Object is saving in the database.  ==="));
-            console.log(chalk.blue("============================================"));
-            console.log(userData);
-            console.log(chalk.blue("============================================"));
-            console.log(chalk.blue("This is User object id from userSchema: " + newUser._id));
-            resolve();
-        }).catch((err) => {
-            if (err) {
-                if (err.code == 11000) {
-                    reject("User Name already taken");
-                } else {
-                    reject("There was an error creating the user: ${user}");
-                }
-            }
-            // reject("There was an error creating the user222222");
-        });
-    }});
-}
+        }});
+    }
 
 module.exports.checkUser = (userData) =>{
     console.log(chalk.blue("============================================="));
@@ -84,23 +86,29 @@ module.exports.checkUser = (userData) =>{
     console.log(chalk.blue("===                                       ==="));
     console.log(chalk.blue("============================================="));
     console.log(">>> userName: " + chalk.green(userData.user) + " <<<");
+    console.log(">>> userName: " + chalk.green(userData.password) + " <<<");
+
     return new Promise((resolve, reject) => {
         Comment.find({user: userData.user}).exec().then((user) => {
-            bcrypt.compare("myPassword123", hash).then((res) => {
-            // res === true if it matches and res === false if it does not match
-                res === true;
-                resolve();
-            }).catch((err) => {
-                res === false;
-                reject("Unable to find user: "+ userData.user);
-            });
         console.log(chalk.bgCyan("Sucess!!!!!!" + user));
         if (user == null) {
             reject('Unable to find user: ' + userData.user);
-        } else if (user[0].password != userData.password) {
-            reject('Incorrect Password for user: ' + user[0].user);
+        } else {
+           hash = user[0].password;
+            console.log(chalk.yellow("++++++++++++++++++++++++++++++++++++++++++++" + user[0].password));
+
+        bcrypt.compare(userData.password, hash).then((res) => {
+             res === true; //if it matches and res === false if it does not match
+             console.log(chalk.bgCyan(hash));
+             resolve();
+        });
+
+        bcrypt.compare(userData.password, hash).then((res) => {
+             res === false; //if it matches and res === false if it does not match
+             console.log(chalk.red(">>>>>>>>>>>>>>>>>>>>"+ hash));
+             reject("Unable to find user: " + userData.user);
+        });
         }
-        resolve();
         }).catch((err) => {
             console.log(chalk.bgCyan("There is Error"));
             reject("Unable to find user: " + userData.user);

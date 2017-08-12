@@ -1,3 +1,4 @@
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 function hidePasswordMessages(){
     $("#passwordChangeSuccess").addClass("hide");
     $("#passwordChangeError").addClass("hide");

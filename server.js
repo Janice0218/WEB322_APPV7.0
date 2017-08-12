@@ -17,6 +17,7 @@ const dataServiceComments = require("./data-service-comments.js");
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const clientSessions = require("client-sessions");
+const bcrypt = require('bcryptjs');
 
 var HTTP_PORT = process.env.PORT || 8080;
 
@@ -35,7 +36,6 @@ const user = {
   username: ""
 };
 
-// Load CSS file
 app.use(express.static('public'));
 
 app.use(clientSessions({
