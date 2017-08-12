@@ -22,11 +22,12 @@ function requestPasswordChange(username) {
         }),
         contentType: "application/json"
     }).done(function (data) {
+        console.log(data);
         hidePasswordMessages();
         if(data.successMessage){
-            $("#passwordChangeSuccess").removeClass("hide").children(".alert").text(data.successMessage);
+            $("#passwordChangeSuccess").removeClass("hide").children(".alert").text(data.successMessage+data.user);
         }else if(data.errorMessage){
-            $("#passwordChangeError").removeClass("hide").children(".alert").text(data.errorMessage);
+            $("#passwordChangeError").removeClass("hide").children(".alert").text(data.errorMessage+data.user);
         }
     }).fail(function (jqXHR) {
         $("#passwordChangeError").removeClass("hide").children(".alert").text("AJAX Error: " + jqXHR.responseText);
