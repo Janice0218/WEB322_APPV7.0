@@ -3,7 +3,7 @@
  *
  *  Name: ___Xiaochen Wang__ Student ID: ___015297153_____ Date: ____11-08-2017__
  *
- *  Online (Heroku) Link:   https://coolwater12.herokuapp.com/s
+ *  Online (Heroku) Link:   https://coolwater12.herokuapp.com/
  *
  ********************************************************************************/
 var express = require("express");
@@ -311,11 +311,14 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/api/updatePassword", (req, res) =>{
-    dataServiceAuth.checkUser({ user: req.body.user, password: req.body.currentPassword }).then(() => {
+    dataServiceAuth.checkUser({ user: req.body.user, password: req.body.currentPassword}).then(() => {
+        console.log(chalk.bgBlue("The_password_already_checked"));
         dataServiceAuth.updatePassword(req.body).then(() => {
-            res.render("employee",{successMessage: "Password changed successfully for user: ", user: req.body.user} )
+            console.log(chalk.bgBlue(">>>Now Update the password!!!!"));
+            res.redirect("/api/updatePassword",{successMessage: "Password changed successfully for user: ", user: req.body.user} )
         }).catch((err) => {
-            res.render("employee", {errorMessage: err} );
+            console.log(chalk.red(">>>Error Update the password!!!!"));
+            res.redirect("/api/updatePassword", {errorMessage: err} );
         });
     }).catch((err) => {
         reject({errorMessage: err});
