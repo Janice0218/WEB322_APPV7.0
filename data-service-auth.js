@@ -118,7 +118,7 @@ module.exports.checkUser = (userData) =>{
 
 module.exports.updatePassword = (userData) => {
     return new Promise((resolve, reject) => {
-        User.update({ user: userData.user },
+        Comment.update({ user: userData.user },
         { $set: { password: hash } },
         { multi: false }).exec().then((res) => {
             resolve();
