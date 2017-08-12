@@ -97,17 +97,17 @@ module.exports.checkUser = (userData) =>{
            hash = user[0].password;
             console.log(chalk.yellow("++++++++++++++++++++++++++++++++++++++++++++" + user[0].password));
 
-        bcrypt.compare(userData.password, hash).then((res) => {
-             res === true; //if it matches and res === false if it does not match
-             console.log(chalk.bgCyan(hash));
-             resolve();
-        });
+            bcrypt.compare(userData.password, hash).then((res) => {
+                res === true; //if it matches and res === false if it does not match
+                console.log(chalk.bgCyan(hash));
+                resolve();
+            });
 
-        bcrypt.compare(userData.password, hash).then((res) => {
-             res === false; //if it matches and res === false if it does not match
-             console.log(chalk.red(">>>>>>>>>>>>>>>>>>>>"+ hash));
-             reject("Unable to find user: " + userData.user);
-        });
+            bcrypt.compare(userData.password, hash).then((res) => {
+                res === false; //if it matches and res === false if it does not match
+                console.log(chalk.red(">>>>>>>>>>>>>>>>>>>>"+ hash));
+                reject("Unable to find user: " + userData.user);
+            });
         }
         }).catch((err) => {
             console.log(chalk.bgCyan("There is Error"));
