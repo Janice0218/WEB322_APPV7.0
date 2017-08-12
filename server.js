@@ -313,9 +313,9 @@ app.post("/login", (req, res) => {
 app.post("/api/updatePassword", (req, res) =>{
     dataServiceAuth.checkUser({ user: req.body.user, password: req.body.currentPassword }).then(() => {
         dataServiceAuth.updatePassword(req.body).then(() => {
-            res.render("",{successMessage: "Password changed successfully for user: ", user: req.body.user} )
+            res.render({successMessage: "Password changed successfully for user: ", user: req.body.user} )
         }).catch((err) => {
-            res.render("", {errorMessage: err} );
+            res.render({errorMessage: err} );
         });
     }).catch((err) => {
         reject({errorMessage: err});
