@@ -18,6 +18,27 @@ const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const clientSessions = require("client-sessions");
 const bcrypt = require('bcryptjs');
+// var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+// const httpRequest = new XMLHttpRequest();
+
+// httpRequest.open('POST', 'https://httpbin.org/post');
+
+// httpRequest.setRequestHeader("Content-Type", "application/json");
+// httpRequest.send(JSON.stringify({ user: "John Doe", job: "unknown" }));
+
+//  httpRequest.onreadystatechange = function(){
+//                 if (httpRequest.readyState === 4) { // The request has completed ("done")
+//                     if (httpRequest.status === 200) {  // We successfully recieved the response
+//                         // Create object jsData from the JSON received in responseText
+//                         let jsData = JSON.parse(httpRequest.responseText);
+//                         // render it in the console
+//                         console.log(chalk.bgMagenta(jsData));
+//                     } else {
+//                         console.log("error: " + httpRequest.statusText);
+//                     }
+//                 }
+//             }
+
 
 var HTTP_PORT = process.env.PORT || 8080;
 
@@ -28,9 +49,10 @@ function ensureLogin(req, res, next) {
     next();
   }
 }
-app.use(bodyParser.urlencoded({ extended:true }));
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended:true }));
+
 
 const user = {
   username: ""
@@ -315,10 +337,22 @@ app.post("/api/updatePassword", (req, res) =>{
         console.log(chalk.bgBlue("The_password_already_checked"));
         dataServiceAuth.updatePassword(req.body).then(() => {
             console.log(chalk.bgBlue(">>>Now Update the password!!!!"));
-            res.redirect("/api/updatePassword",{successMessage: "Password changed successfully for user: ", user: req.body.user} )
+            //  httpRequest.onreadystatechange = function(){
+            //     if (httpRequest.readyState === 4) { // The request has completed ("done")
+            //         if (httpRequest.status === 200) {  // We successfully recieved the response
+            //             // Create object jsData from the JSON received in responseText
+            //             let jsData = JSON.parse(httpRequest.responseText);
+            //             // render it in the console
+            //             console.log(chalk.bgMagenta(jsData));
+            //         } else {
+            //             console.log("error: " + httpRequest.statusText);
+            //         }
+            //     }
+            // }
+            res.redirect("employees#",{successMessage: "Password changed successfully for user: ", user: req.body.user} )
         }).catch((err) => {
             console.log(chalk.red(">>>Error Update the password!!!!"));
-            res.redirect("/api/updatePassword", {errorMessage: err} );
+            res.redirect("employees#", {errorMessage: err} );
         });
     }).catch((err) => {
         reject({errorMessage: err});
