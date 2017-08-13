@@ -126,7 +126,7 @@ module.exports.checkUser = (userData) =>{
                     }  else if (valid == false) {
                         // password does not match
                         console.log(chalk.red("Unable to match the password"));
-                        reject("The Password is worry for user: " + userData.user);
+                        reject("The current password is worry for user: " + userData.user);
                     }
                 });
             }
@@ -159,7 +159,7 @@ module.exports.updatePassword = (userData) => {
             bcrypt.hash(userData.password, salt, function(err, hash) { // encrypt the password: "myPassword123"
                 // TODO: Store the resulting "hash" value in the DB
                 console.log(chalk.yellow(hash));
-                Comment.update({ user: hash },
+                Comment.update({ user: userData.user },
                 { $set: { password: hash } },
                 { multi: false }).exec().then((res) => {
                     resolve();
