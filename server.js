@@ -317,8 +317,10 @@ app.post("/api/updatePassword", (req, res) =>{
         console.log(chalk.bgBlue("The_password_already_checked"));
         dataServiceAuth.updatePassword(req.body).then(() => {
             console.log(chalk.bgBlue(">>>Now Update the password!!!!"));
-            console.log(chalk.yellow(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+req.body.user));
-            res.send({successMessage: "Password changed successfully for user: ", user: req.body.user});
+            res.send({successMessage: "Password changed successfully for user: "});
+        }).catch((err) => {
+            console.log(chalk.red(">>>Error Update the password!!!!"));
+            res.send({errorMessage: err});
         });
     }).catch((err) => {
         console.log(chalk.red(">>>Error Update the password!!!!"));

@@ -30,7 +30,7 @@ module.exports.initialize = () => {
         });
         db.once('open', () => {
             Comment = db.model("users", userSchema);
-            // Comment.remove({ }, function (err) { });
+            // Comment.remove({ }, function (err) { }); // remove collection
             resolve("Secess initialize MongoDB");
         });
     });
@@ -139,13 +139,36 @@ module.exports.checkUser = (userData) =>{
 };
 
 module.exports.updatePassword = (userData) => {
+    console.log(chalk.blue("============================================="));
+    console.log(chalk.blue("===                                       ==="));
+    console.log(chalk.blue("=== This is ")+chalk.green("updatePassword")+chalk.blue(" function       ===" ));
+    console.log(chalk.blue("===                                       ==="));
+    console.log(chalk.blue("============================================="));
     return new Promise((resolve, reject) => {
-        Comment.update({ user: userData.user },
-        { $set: { password: hash } },
-        { multi: false }).exec().then((res) => {
-            resolve();
-        }).catch((err) => {
-            reject("There was an error updating the password for " + userData.user);
+        console.log(chalk.bgGreen("The new password: "+ userData.password));
+        console.log(chalk.bgGreen("The new password2: "+ userData.password2));
+
+        if (userData.password != userData.password2) {
+            console.log(chalk.bgCyan("The new passwords do not match."));
+            reject("The new passwords do not match.");
+        }
+        bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
+            if (err) {
+                reject("There was an error encrypting the password");
+            }
+            bcrypt.hash(userData.password, salt, function(err, hash) { // encrypt the password: "myPassword123"
+                // TODO: Store the resulting "hash" value in the DB
+                console.log(chalk.yellow(hash));
+                Comment.update({ user: hash },
+                { $set: { password: hash } },
+                { multi: false }).exec().then((res) => {
+                    resolve();
+                });
+            });
         });
+           
+            // reject("sadfdasfdsaf");
+    }).catch((err) => {
+        reject("There was an error updating the password for " + userData.user);
     });
 };
