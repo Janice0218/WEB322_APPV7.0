@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const chalk = require('chalk');
 const bcrypt = require('bcryptjs');
+var crypto = require('crypto');
 let Schema = mongoose.Schema;
 
 mongoose.Promise = global.Promise;
@@ -29,7 +30,7 @@ module.exports.initialize = () => {
         });
         db.once('open', () => {
             Comment = db.model("users", userSchema);
-            Comment.remove({ }, function (err) { });
+            // Comment.remove({ }, function (err) { });
             resolve("Secess initialize MongoDB");
         });
     });
@@ -64,6 +65,7 @@ module.exports.registerUser = (userData) => {
                         console.log(chalk.blue("This is User object id from userSchema: " + newUser._id));
                         console.log(chalk.green(newUser));
                         resolve();
+                        //newUser.save(callback);
                     }).catch((err) => {
                         if (err) {
                             if (err.code == 11000) {
@@ -85,30 +87,49 @@ module.exports.checkUser = (userData) =>{
     console.log(chalk.blue("===     This is checkUser function        ==="));
     console.log(chalk.blue("===                                       ==="));
     console.log(chalk.blue("============================================="));
+    // console.log(">>> userName: " + Comment.find({},) + " <<<");
     console.log(">>> userName: " + chalk.green(userData.user) + " <<<");
-    console.log(">>> userName: " + chalk.green(userData.password) + " <<<");
+    console.log(">>> userPasswords: " + chalk.green(userData.password) + " <<<");
+    // hash = user.password;
+    // console.log(">>> hash: " + chalk.green(hash) + " <<<");
+
 
     return new Promise((resolve, reject) => {
         Comment.find({user: userData.user}).exec().then((user) => {
-        console.log(chalk.bgCyan("Sucess!!!!!!" + user));
-        if (user == null) {
-            reject('Unable to find user: ' + userData.user);
-        } else {
-           hash = user[0].password;
-            console.log(chalk.yellow("++++++++++++++++++++++++++++++++++++++++++++" + user[0].password));
+            console.log(chalk.bgCyan("Sucess!!!!!!" + user));
+            if (user == null) {
+                reject('Unable to find user: ' + userData.user);
+            } else {
+                hash = user[0].password;
+                // bcrypt.hash(JSON.stringify(userData.password), 10, function(err, hash) {
+                //     if (err) { throw (err); }
 
-            bcrypt.compare(userData.password, hash).then((res) => {
-                res === true; //if it matches and res === false if it does not match
-                console.log(chalk.bgCyan(hash));
-                resolve();
-            });
-
-            bcrypt.compare(userData.password, hash).then((res) => {
-                res === false; //if it matches and res === false if it does not match
-                console.log(chalk.red(">>>>>>>>>>>>>>>>>>>>"+ hash));
-                reject("Unable to find user: " + userData.user);
-            });
-        }
+                //     // Load hash from your password DB.
+                //     bcrypt.compare('123dsfdsfdaafadsfa', hash).then(function(res) {
+                //         console.log(chalk.green("Success check password"));
+                //         res == true;
+                //         resolve();
+                //     });
+                //     bcrypt.compare('sdafdsafsdafsdaf', hash).then(function(res) {
+                //         console.log(chalk.red("Failed check password"));
+                //         res == false;
+                //         reject("ERR");
+                //     });
+                // });
+                console.log(chalk.bgMagenta("Staring compare the password"));
+                bcrypt.compare(userData.password, hash, function(err, valid) {
+                    if (err) { throw (err); }
+                    if (valid == true) {
+                        // password matches
+                        console.log(chalk.green("Match the password"));
+                        resolve();
+                    }  else if (valid == false) {
+                        // password does not match
+                        console.log(chalk.red("Unable to match the password"));
+                        reject("The Password is worry for user: " + userData.user);
+                    }
+                });
+            }
         }).catch((err) => {
             console.log(chalk.bgCyan("There is Error"));
             reject("Unable to find user: " + userData.user);
