@@ -25,9 +25,9 @@ function requestPasswordChange(username) {
         console.log(data);
         hidePasswordMessages();
         if(data.successMessage){
-            $("#passwordChangeSuccess").removeClass("hide").children(".alert").text(data.successMessage+data.user);
+            $("#passwordChangeSuccess").removeClass("hide").children(".alert").text(data.successMessage);
         }else if(data.errorMessage){
-            $("#passwordChangeError").removeClass("hide").children(".alert").text(data.errorMessage+data.user);
+            $("#passwordChangeError").removeClass("hide").children(".alert").text(data.errorMessage);
         }
     }).fail(function (jqXHR) {
         $("#passwordChangeError").removeClass("hide").children(".alert").text("AJAX Error: " + jqXHR.responseText);

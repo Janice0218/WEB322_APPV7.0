@@ -117,8 +117,8 @@ module.exports.checkUser = (userData) =>{
                 //     });
                 // });
                 console.log(chalk.bgMagenta("Staring compare the password"));
-                bcrypt.compare(userData.password, hash, function(err, valid) {
-                    if (err) { throw (err); }
+                bcrypt.compare(userData.password, hash, (err, valid) => {
+                    if (err) { throw (err); };
                     if (valid == true) {
                         // password matches
                         console.log(chalk.green("Match the password"));
@@ -131,6 +131,7 @@ module.exports.checkUser = (userData) =>{
                 });
             }
         }).catch((err) => {
+            if (err) { throw (err); };
             console.log(chalk.bgCyan("There is Error"));
             reject("Unable to find user: " + userData.user);
         });
