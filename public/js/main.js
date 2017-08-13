@@ -25,7 +25,7 @@ function requestPasswordChange(username) {
         console.log(data);
         hidePasswordMessages();
         if(data.successMessage){
-            $("#passwordChangeSuccess").removeClass("hide").children(".alert").text(data.successMessage);
+            $("#passwordChangeSuccess").removeClass("hide").children(".alert").text(data.successMessage+data.user);
         }else if(data.errorMessage){
             $("#passwordChangeError").removeClass("hide").children(".alert").text(data.errorMessage);
         }

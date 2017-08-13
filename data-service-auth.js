@@ -151,8 +151,8 @@ module.exports.updatePassword = (userData) => {
         if (userData.password != userData.password2) {
             console.log(chalk.bgCyan("The new passwords do not match."));
             reject("The new passwords do not match.");
-        }
-        bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
+        } else {
+            bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
             if (err) {
                 reject("There was an error encrypting the password");
             }
@@ -166,7 +166,7 @@ module.exports.updatePassword = (userData) => {
                 });
             });
         });
-           
+        }
             // reject("sadfdasfdsaf");
     }).catch((err) => {
         reject("There was an error updating the password for " + userData.user);
