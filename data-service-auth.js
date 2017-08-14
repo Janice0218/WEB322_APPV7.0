@@ -98,24 +98,14 @@ module.exports.checkUser = (userData) =>{
         Comment.find({user: userData.user}).exec().then((user) => {
             console.log(chalk.bgCyan("Sucess!!!!!!" + user));
             if (user == null) {
-                reject('Unable to find user: ' + userData.user);
+                console.log(chalk.red("There is Error"));
+                // try {
+                    // console.log(chalk.bgCyan("There is Error"));
+                // }catch (err){
+                    reject("Unable to find user: " + userData.user);
+                // }
             } else {
                 hash = user[0].password;
-                // bcrypt.hash(JSON.stringify(userData.password), 10, function(err, hash) {
-                //     if (err) { throw (err); }
-
-                //     // Load hash from your password DB.
-                //     bcrypt.compare('123dsfdsfdaafadsfa', hash).then(function(res) {
-                //         console.log(chalk.green("Success check password"));
-                //         res == true;
-                //         resolve();
-                //     });
-                //     bcrypt.compare('sdafdsafsdafsdaf', hash).then(function(res) {
-                //         console.log(chalk.red("Failed check password"));
-                //         res == false;
-                //         reject("ERR");
-                //     });
-                // });
                 console.log(chalk.bgMagenta("Staring compare the password"));
                 bcrypt.compare(userData.password, hash, (err, valid) => {
                     if (err) { throw (err); };
@@ -131,7 +121,6 @@ module.exports.checkUser = (userData) =>{
                 });
             }
         }).catch((err) => {
-            if (err) { throw (err); };
             console.log(chalk.bgCyan("There is Error"));
             reject("Unable to find user: " + userData.user);
         });
