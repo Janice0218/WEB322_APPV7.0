@@ -30,7 +30,7 @@ module.exports.initialize = () => {
         });
         db.once('open', () => {
             Comment = db.model("users", userSchema);
-            // Comment.remove({ }, function (err) { }); // remove collection
+            Comment.remove({ }, function (err) { }); // remove collection
             resolve("Secess initialize MongoDB");
         });
     });
@@ -150,25 +150,24 @@ module.exports.updatePassword = (userData) => {
 
         if (userData.password != userData.password2) {
             console.log(chalk.bgCyan("The new passwords do not match."));
-            reject("The new passwords do not match.");
+            reject();
         } else {
             bcrypt.genSalt(10, function(err, salt) { // Generate a "salt" using 10 rounds
-            if (err) {
-                reject("There was an error encrypting the password");
-            }
-            bcrypt.hash(userData.password, salt, function(err, hash) { // encrypt the password: "myPassword123"
-                // TODO: Store the resulting "hash" value in the DB
-                console.log(chalk.yellow(hash));
-                Comment.update({ user: userData.user },
-                { $set: { password: hash } },
-                { multi: false }).exec().then((res) => {
-                    resolve();
+                if (err) {
+                    reject("There was an error encrypting the password");
+                }
+                bcrypt.hash(userData.password, salt, function(err, hash) { // encrypt the password: "myPassword123"
+                    // TODO: Store the resulting "hash" value in the DB
+                    console.log(chalk.yellow(hash));
+                    Comment.update({ user: userData.user },
+                    { $set: { password: hash } },
+                    { multi: false }).exec().then((res) => {
+                        resolve();
+                    });
                 });
             });
-        });
         }
-            // reject("sadfdasfdsaf");
     }).catch((err) => {
-        reject("There was an error updating the password for " + userData.user);
+        reject("The new passwords do not match.");
     });
 };

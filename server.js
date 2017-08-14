@@ -319,11 +319,12 @@ app.post("/api/updatePassword", (req, res) =>{
             console.log(chalk.bgBlue(">>>Now Update the password!!!!"));
             res.send({successMessage: "Password changed successfully for user: ", user: req.body.user});
         }).catch((err) => {
-            console.log(chalk.red(">>>Error Update the password!!!!"));
-            res.send({errorMessage: err});
+            console.log(chalk.red(">>>1Error Update the password!!!!"));
+            res.send({errorMessage:"The new passwords do not match."});
         });
     }).catch((err) => {
-        console.log(chalk.red(">>>Error Update the password!!!!"));
+        console.log(chalk.red(">>>2Error Update the password!!!!"));
+        console.log(err);
         res.send({errorMessage: err});
     });
 });
