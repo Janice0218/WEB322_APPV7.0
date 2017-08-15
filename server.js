@@ -145,11 +145,16 @@ app.get("/employees", ensureLogin,(req, res) => {
         // require(['./node_modules/chart.js/dist/Chart.js'], (Chart) => {
 
         // });
+        data_service.getDepartments().then((data) => {
+            var departmentTitle = data;
+        
         data_service.getAllEmployees().then((data) => {
-            res.render("employeeList", { data: data, title: "Employees", user: req.session.user});
+            console.log(chalk.cyan(departmentTitle));
+            res.render("employeeList", { data: data, title: "Employees", user: req.session.user, departmentTitle: departmentTitle});
         }).catch((err) => {
             res.render("employeeList", { data: {}, title: "Employees"});
         });
+    });
     }
 });
 
