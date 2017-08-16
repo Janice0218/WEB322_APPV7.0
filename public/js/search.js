@@ -4,9 +4,9 @@ function filterNames(){
     let filterValue = document.getElementById('filterInput').value.toUpperCase();
     console.log(filterValue);
     let tbody = document.getElementById('names');
-
+    console.log(tbody);
     let tr = tbody.querySelectorAll('tr.collection-item');
-    //console.log(li.length);
+    console.log(tr);
     console.log(tr.length);
     for(let i = 0; i < tr.length; i++){
         let td = tr[i].getElementsByTagName('a')[0];
