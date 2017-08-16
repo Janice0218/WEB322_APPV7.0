@@ -30,7 +30,7 @@ module.exports.initialize = () => {
         });
         db.once('open', () => {
             Comment = db.model("users", userSchema);
-            Comment.remove({ }, function (err) { }); // remove collection
+            // Comment.remove({ }, function (err) { }); // remove collection
             resolve("Secess initialize MongoDB");
         });
     });
